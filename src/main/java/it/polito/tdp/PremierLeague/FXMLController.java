@@ -44,7 +44,8 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
- 	Double goal;
+ 	    txtResult.clear();
+    	Double goal;
     	
     	try {
     		goal = Double.parseDouble(txtGoals.getText());
@@ -55,7 +56,7 @@ public class FXMLController {
     	}
     	this.model.creaGrafo(goal);
     	txtResult.appendText(String.format("Grafo creato con %d vertici e %d archi", this.model.nVertici(), this.model.nArchi()));
-    	
+    	  
 
     }
 

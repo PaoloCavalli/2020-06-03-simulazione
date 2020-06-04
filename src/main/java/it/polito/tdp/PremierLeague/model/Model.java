@@ -1,7 +1,10 @@
 package it.polito.tdp.PremierLeague.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -14,7 +17,7 @@ public class Model {
 
 	private PremierLeagueDAO dao;
 	private Map<Integer,Player> idMap;
-	private Graph <Integer,DefaultWeightedEdge> grafo;
+	private Graph <Player,DefaultWeightedEdge> grafo;
 	
 	
 	public Model() {
@@ -24,25 +27,46 @@ public class Model {
 	
 	public void creaGrafo(Double goalX) {
 		
-		grafo = new SimpleDirectedWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		grafo = new SimpleDirectedWeightedGraph<Player, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		
+	        List<Player> giocatori = dao.getGiocatori(goalX, idMap);
+			for(Player p: giocatori) {
+				this.grafo.addVertex(p);
+			}
+		
+	   List <Adiacenza> adiacenze =dao.getAdiacenze(idMap);
+	        for (Adiacenza a: adiacenze ) {
+	        	//cara if mi sei costata 4 ore .... Grazie!
+	        	if(this.grafo.containsVertex(a.getP1()) && this.grafo.containsVertex(a.getP2())){
+					
+					Graphs.addEdge(this.grafo, a.getP1(), a.getP2() , a.getPeso());
+	        	}			
+				
+			}
+	}
 	
-			
-			Graphs.addAllVertices(this.grafo,this.dao.getGiocatori(goalX, idMap) );
-			
+	public Player getBoomer()  {
 		
-		
-
-		
-		for (Adiacenza a: dao.getAdiacenze()) {
-			if(a.getPeso() > 0) {
-				
-				
-				Graphs.addEdge(this.grafo, a.getP1(), a.getP2() , a.getPeso());
+		Player bestBoomer= null ;
+		Integer b = 0;
+		for(Player p : this.grafo.vertexSet()) {
+			if(this.grafo.outDegreeOf(p)> b) {
+		    b = this.grafo.outDegreeOf(p);
+			bestBoomer = p;
+		    
 			}
 		}
-		
+		return bestBoomer;
 	}
+	/*public List<Adiacenza> getLoosers(Player boomer){
+		
+		
+	    List<Player> battuti = Graphs.successorListOf(this.grafo, boomer);
+	   
+		
+		
+	}*/
+	
 	public int nVertici() {
 		return	this.grafo.vertexSet().size();
 		}

@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Player;
+import it.polito.tdp.PremierLeague.model.PlayerAndPeso;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -55,7 +57,7 @@ public class FXMLController {
     	    return;
     	}
     	this.model.creaGrafo(goal);
-    	txtResult.appendText(String.format("Grafo creato con %d vertici e %d archi", this.model.nVertici(), this.model.nArchi()));
+    	txtResult.appendText(String.format("Grafo creato con %d vertici e %d archi \n\n", this.model.nVertici(), this.model.nArchi()));
     	  
 
     }
@@ -67,7 +69,21 @@ public class FXMLController {
 
     @FXML
     void doTopPlayer(ActionEvent event) {
-
+    txtResult.clear();
+    	
+    Player p = this.model.getBoomer();
+    if ( p == null) {
+      txtResult.appendText("Non ci sono Top Player");
+      return;
+    }
+    txtResult.appendText("TOP PLAYER:");
+    txtResult.appendText(p.toString()+"\n\n");
+    txtResult.appendText("AVVERSARI BATTUTI: \n");
+     for(PlayerAndPeso pn : this.model.getLoosers(p)) {
+    	
+    	 txtResult.appendText(pn.toString()+"\n");
+     }
+    
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

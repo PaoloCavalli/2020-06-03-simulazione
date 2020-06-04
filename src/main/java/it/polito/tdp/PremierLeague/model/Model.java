@@ -44,7 +44,7 @@ public class Model {
 				
 			}
 	}
-	
+	//PUNTO 1D
 	public Player getBoomer()  {
 		
 		Player bestBoomer= null ;
@@ -53,20 +53,25 @@ public class Model {
 			if(this.grafo.outDegreeOf(p)> b) {
 		    b = this.grafo.outDegreeOf(p);
 			bestBoomer = p;
-		    
-			}
+		   }
 		}
 		return bestBoomer;
 	}
-	/*public List<Adiacenza> getLoosers(Player boomer){
-		
-		
-	    List<Player> battuti = Graphs.successorListOf(this.grafo, boomer);
-	   
-		
-		
-	}*/
 	
+	public List<PlayerAndPeso> getLoosers(Player boomer){
+		
+		 List<PlayerAndPeso> loosers = new ArrayList<>();
+		 
+	  for(Player p:  Graphs.successorListOf(this.grafo, boomer)) {
+		  //ottengo il peso dell'arco
+		  DefaultWeightedEdge e = this.grafo.getEdge(boomer, p);
+		  Integer punteggio =  (int) this.grafo.getEdgeWeight(e);
+		  loosers.add(new PlayerAndPeso(p,punteggio));
+		  
+	  }
+	  return loosers;
+	}
+	//
 	public int nVertici() {
 		return	this.grafo.vertexSet().size();
 		}

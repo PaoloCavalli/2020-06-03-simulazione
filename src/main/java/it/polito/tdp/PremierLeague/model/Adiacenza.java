@@ -36,10 +36,7 @@ public void setPeso(Integer peso) {
 	this.peso = peso;
 }
 
-@Override
-public String toString() {
-	return  p2.getName() + "|" + peso ;
-}
+
 
 
 }
